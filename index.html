@@ -66,11 +66,11 @@
         <p>Listings</p>
       </div>
       <div>
-        <h3>2</h3>
+        <h3 id="skillCount">0</h3>
         <p>Skill Offers</p>
       </div>
       <div>
-        <h3>3</h3>
+        <h3 id="itemCount">0</h3>
         <p>Item Posts</p>
       </div>
       <div>
@@ -151,19 +151,19 @@
       <div class="account-grid">
         <div class="input-card">
           <h3>Student Login</h3>
-          <input type="email" placeholder="ACity email" />
-          <input type="password" placeholder="Password" />
-          <button onclick="fakeLogin()">Login</button>
+          <input id="loginEmail" type="email" placeholder="ACity email" />
+          <input id="loginPassword" type="password" placeholder="Password" />
+          <button onclick="loginUser()">Login</button>
         </div>
 
         <div class="input-card">
           <h3>Create Profile</h3>
-          <input type="text" placeholder="Full name" />
-          <input type="email" placeholder="Institutional email" />
-          <input type="password" placeholder="Password" />
-          <input type="text" placeholder="Skills offered" />
-          <input type="text" placeholder="Skills needed" />
-          <button onclick="fakeRegister()">Register</button>
+          <input id="registerName" type="text" placeholder="Full name" />
+          <input id="registerEmail" type="email" placeholder="Institutional email" />
+          <input id="registerPassword" type="password" placeholder="Password" />
+          <input id="registerSkillsOffered" type="text" placeholder="Skills offered" />
+          <input id="registerSkillsNeeded" type="text" placeholder="Skills needed" />
+          <button onclick="registerUser()">Register</button>
         </div>
       </div>
     </section>
@@ -177,21 +177,21 @@
       <div class="admin-layout">
         <div class="admin-card">
           <h3>Pending Approval</h3>
-          <p>Review new student posts before making them visible.</p>
-          <button>Approve</button>
-          <button class="warning-btn">Reject</button>
+          <p>New listings are saved to the database and remain hidden until approved by an admin.</p>
+          <button onclick="alert('Admin approval is currently handled from pgAdmin during local testing.')">Approve</button>
+          <button class="warning-btn" onclick="alert('Reject feature will be handled through backend admin routes.')">Reject</button>
         </div>
 
         <div class="admin-card">
           <h3>Platform Activity</h3>
-          <p>Total posts, user activity, and interaction requests can be monitored here.</p>
-          <button>View Report</button>
+          <p>Track users, listings, and interaction requests through the backend database.</p>
+          <button onclick="alert('Reports will use backend admin statistics after deployment.')">View Report</button>
         </div>
 
         <div class="admin-card">
           <h3>Content Control</h3>
-          <p>Remove inappropriate or misleading posts from the platform.</p>
-          <button class="danger-btn">Remove Content</button>
+          <p>Admin users can remove inappropriate or misleading posts from the platform.</p>
+          <button class="danger-btn" onclick="alert('Content removal will be connected to admin delete routes.')">Remove Content</button>
         </div>
       </div>
     </section>

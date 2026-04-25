@@ -1,46 +1,21 @@
-let interestCounter = 0;
+const API_URL = "http://localhost:5000/api";
 
-let campusPosts = [
-  {
-    title: "Engineering Drawing Set",
-    description: "Complete drawing set with T-square, compass, ruler, and clean drawing board.",
-    category: "Item",
-    status: "Available",
-    owner: "Adewunmi"
-  },
-  {
-    title: "Frontend Project Help",
-    description: "I can help students with HTML, CSS, JavaScript layout issues and project structure.",
-    category: "Skill",
-    status: "Available",
-    owner: "Nana"
-  },
-  {
-    title: "Pre-owned Headphones",
-    description: "Good sound quality, clean condition, useful for online lectures and study sessions.",
-    category: "Item",
-    status: "Available",
-    owner: "Kelvin"
-  },
-  {
-    title: "Mathematics Peer Tutoring",
-    description: "Available to explain calculus, limits, functions, and basic statistics.",
-    category: "Skill",
-    status: "Swapped",
-    owner: "Akosua"
-  },
-  {
-    title: "Laptop Stand",
-    description: "Adjustable laptop stand for better posture while coding or studying.",
-    category: "Item",
-    status: "Sold",
-    owner: "Jason"
-  }
-];
+let campusPosts = [];
+let interestCounter = 0;
 
 const postContainer = document.getElementById("postContainer");
 const listingCount = document.getElementById("countListings");
 const interestedCount = document.getElementById("countInterested");
+
+async function loadListings() {
+  try {
+    const response = await fetch(`${API_URL}/listings`);
+    campusPosts = await response.json();
+    renderPosts(campusPosts);
+  } catch (error) {
+    alert("Could not load listings from backend.");
+  }
+}
 
 function renderPosts(postsToShow) {
   postContainer.innerHTML = "";
@@ -48,37 +23,38 @@ function renderPosts(postsToShow) {
   if (postsToShow.length === 0) {
     postContainer.innerHTML = `
       <div class="trade-card">
-        <h3>No results found</h3>
-        <p>Try searching with another keyword or filter.</p>
+        <h3>No listings found</h3>
+        <p>No approved listings are available yet.</p>
       </div>
     `;
+    listingCount.textContent = 0;
     return;
   }
 
-  postsToShow.forEach((post, index) => {
+  postsToShow.forEach((post) => {
     const card = document.createElement("article");
     card.className = "trade-card";
 
     card.innerHTML = `
       <div class="card-top">
         <span class="type-pill">${post.category}</span>
-        <span class="status-pill">${post.status}</span>
+        <span class="status-pill">${post.status || "Available"}</span>
       </div>
 
       <h3>${post.title}</h3>
       <p>${post.description}</p>
-      <p class="owner-text">Posted by: ${post.owner}</p>
+      <p class="owner-text">Posted by: ${post.owner_name || "Student"}</p>
 
-      <button onclick="markInterest(${index})">Request / Interested</button>
+      <button onclick="markInterest(${post.id})">Request / Interested</button>
     `;
 
     postContainer.appendChild(card);
   });
 
-  listingCount.textContent = campusPosts.length;
+  listingCount.textContent = postsToShow.length;
 }
 
-function applySearch() {
+async function applySearch() {
   const keyword = document.getElementById("keywordBox").value.toLowerCase();
   const type = document.getElementById("typeBox").value;
   const status = document.getElementById("statusBox").value;
@@ -87,7 +63,7 @@ function applySearch() {
     const keywordMatch =
       post.title.toLowerCase().includes(keyword) ||
       post.description.toLowerCase().includes(keyword) ||
-      post.owner.toLowerCase().includes(keyword);
+      (post.owner_name || "").toLowerCase().includes(keyword);
 
     const typeMatch = type === "All" || post.category === type;
     const statusMatch = status === "All" || post.status === status;
@@ -98,51 +74,162 @@ function applySearch() {
   renderPosts(filteredPosts);
 }
 
-function submitPost() {
+async function registerUser() {
+  const full_name = document.getElementById("registerName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const password = document.getElementById("registerPassword").value.trim();
+  const skills_offered = document.getElementById("registerSkillsOffered").value.trim();
+  const skills_needed = document.getElementById("registerSkillsNeeded").value.trim();
+
+  if (!full_name || !email || !password) {
+    alert("Please enter name, email, and password.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        full_name,
+        email,
+        password,
+        skills_offered,
+        skills_needed
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Registration failed.");
+      return;
+    }
+
+    alert("Registration successful. You can now login.");
+  } catch (error) {
+    alert("Could not connect to backend.");
+  }
+}
+
+async function loginUser() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!email || !password) {
+    alert("Please enter email and password.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Login failed.");
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+    alert("Login successful.");
+  } catch (error) {
+    alert("Could not connect to backend.");
+  }
+}
+
+async function submitPost() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login before creating a listing.");
+    return;
+  }
+
   const title = document.getElementById("newTitle").value.trim();
   const description = document.getElementById("newDescription").value.trim();
   const category = document.getElementById("newCategory").value;
   const status = document.getElementById("newStatus").value;
 
-  if (title === "" || description === "" || category === "") {
+  if (!title || !description || !category) {
     alert("Please complete the title, description, and category.");
     return;
   }
 
-  const newPost = {
-    title: title,
-    description: description,
-    category: category,
-    status: status,
-    owner: "Logged-in Student"
-  };
+  try {
+    const response = await fetch(`${API_URL}/listings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        category,
+        status
+      })
+    });
 
-  campusPosts.unshift(newPost);
+    const data = await response.json();
 
-  document.getElementById("newTitle").value = "";
-  document.getElementById("newDescription").value = "";
-  document.getElementById("newCategory").value = "";
-  document.getElementById("newStatus").value = "Available";
+    if (!response.ok) {
+      alert(data.message || "Could not create listing.");
+      return;
+    }
 
-  renderPosts(campusPosts);
+    document.getElementById("newTitle").value = "";
+    document.getElementById("newDescription").value = "";
+    document.getElementById("newCategory").value = "";
+    document.getElementById("newStatus").value = "Available";
 
-  alert("Your post has been added to the frontend preview.");
+    alert("Listing submitted. Admin approval is required before it appears publicly.");
+  } catch (error) {
+    alert("Could not connect to backend.");
+  }
 }
 
-function markInterest(index) {
-  interestCounter++;
-  interestedCount.textContent = interestCounter;
+async function markInterest(listingId) {
+  const token = localStorage.getItem("token");
 
-  const selectedPost = campusPosts[index];
-  alert("Interest request sent for: " + selectedPost.title);
+  if (!token) {
+    alert("Please login before showing interest.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/listings/${listingId}/interested`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        message: "I am interested in this listing."
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Could not send interest request.");
+      return;
+    }
+
+    interestCounter++;
+    interestedCount.textContent = interestCounter;
+    alert("Interest request sent successfully.");
+  } catch (error) {
+    alert("Could not connect to backend.");
+  }
 }
 
-function fakeLogin() {
-  alert("Login interface ready. Backend authentication will be connected later.");
-}
-
-function fakeRegister() {
-  alert("Registration interface ready. Backend database will be connected later.");
-}
-
-renderPosts(campusPosts);
+loadListings();
