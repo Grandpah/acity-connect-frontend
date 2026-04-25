@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusTrade ACITY</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="brand">
+      <div class="logo-circle">A</div>
+      <div>
+        <h1>CampusTrade</h1>
+        <p>Academic City Marketplace & Skill Hub</p>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#welcome">Welcome</a>
+      <a href="#discover">Discover</a>
+      <a href="#post">Post</a>
+      <a href="#account">Account</a>
+      <a href="#control">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section id="welcome" class="welcome-screen">
+      <div class="welcome-left">
+        <p class="tag">Built for ACity students</p>
+        <h2>Exchange items, skills, and opportunities across campus.</h2>
+        <p class="intro">
+          CampusTrade helps students sell second-hand items, request skills,
+          offer services, and connect safely within the Academic City community.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#discover" class="primary-link">Browse Listings</a>
+          <a href="#post" class="secondary-link">Create a Post</a>
+        </div>
+      </div>
+
+      <div class="welcome-card">
+        <h3>Today on CampusTrade</h3>
+        <div class="mini-row">
+          <span>📚</span>
+          <p>Textbooks, calculators, gadgets</p>
+        </div>
+        <div class="mini-row">
+          <span>💻</span>
+          <p>Coding, design, tutoring help</p>
+        </div>
+        <div class="mini-row">
+          <span>🤝</span>
+          <p>Interest requests and swaps</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-stats">
+      <div>
+        <h3 id="countListings">0</h3>
+        <p>Listings</p>
+      </div>
+      <div>
+        <h3>2</h3>
+        <p>Skill Offers</p>
+      </div>
+      <div>
+        <h3>3</h3>
+        <p>Item Posts</p>
+      </div>
+      <div>
+        <h3 id="countInterested">0</h3>
+        <p>Interest Clicks</p>
+      </div>
+    </section>
+
+    <section id="discover" class="content-section">
+      <div class="section-heading">
+        <p>Marketplace Feed</p>
+        <h2>Discover student posts</h2>
+      </div>
+
+      <div class="tool-panel">
+        <input id="keywordBox" type="text" placeholder="Search by title or description..." />
+
+        <select id="typeBox">
+          <option value="All">All Types</option>
+          <option value="Item">Items Only</option>
+          <option value="Skill">Skills Only</option>
+        </select>
+
+        <select id="statusBox">
+          <option value="All">All Statuses</option>
+          <option value="Available">Available</option>
+          <option value="Sold">Sold</option>
+          <option value="Swapped">Swapped</option>
+        </select>
+
+        <button onclick="applySearch()">Apply Filter</button>
+      </div>
+
+      <div id="postContainer" class="post-container"></div>
+    </section>
+
+    <section id="post" class="split-section">
+      <div class="info-block">
+        <p class="tag">Create Listing</p>
+        <h2>Post an item or offer a skill</h2>
+        <p>
+          Students can create posts for second-hand products, tutoring,
+          design support, programming help, or any useful campus skill.
+        </p>
+      </div>
+
+      <div class="input-card">
+        <label>Post Title</label>
+        <input id="newTitle" type="text" placeholder="Example: JavaScript tutoring" />
+
+        <label>Description</label>
+        <textarea id="newDescription" placeholder="Describe what you are offering or requesting"></textarea>
+
+        <label>Category</label>
+        <select id="newCategory">
+          <option value="">Choose category</option>
+          <option value="Item">Item</option>
+          <option value="Skill">Skill</option>
+        </select>
+
+        <label>Status</label>
+        <select id="newStatus">
+          <option value="Available">Available</option>
+          <option value="Sold">Sold</option>
+          <option value="Swapped">Swapped</option>
+        </select>
+
+        <button onclick="submitPost()">Submit Post</button>
+      </div>
+    </section>
+
+    <section id="account" class="content-section account-area">
+      <div class="section-heading">
+        <p>User Access</p>
+        <h2>Login and Registration</h2>
+      </div>
+
+      <div class="account-grid">
+        <div class="input-card">
+          <h3>Student Login</h3>
+          <input type="email" placeholder="ACity email" />
+          <input type="password" placeholder="Password" />
+          <button onclick="fakeLogin()">Login</button>
+        </div>
+
+        <div class="input-card">
+          <h3>Create Profile</h3>
+          <input type="text" placeholder="Full name" />
+          <input type="email" placeholder="Institutional email" />
+          <input type="password" placeholder="Password" />
+          <input type="text" placeholder="Skills offered" />
+          <input type="text" placeholder="Skills needed" />
+          <button onclick="fakeRegister()">Register</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="control" class="content-section">
+      <div class="section-heading">
+        <p>Admin Area</p>
+        <h2>Moderation Dashboard</h2>
+      </div>
+
+      <div class="admin-layout">
+        <div class="admin-card">
+          <h3>Pending Approval</h3>
+          <p>Review new student posts before making them visible.</p>
+          <button>Approve</button>
+          <button class="warning-btn">Reject</button>
+        </div>
+
+        <div class="admin-card">
+          <h3>Platform Activity</h3>
+          <p>Total posts, user activity, and interaction requests can be monitored here.</p>
+          <button>View Report</button>
+        </div>
+
+        <div class="admin-card">
+          <h3>Content Control</h3>
+          <p>Remove inappropriate or misleading posts from the platform.</p>
+          <button class="danger-btn">Remove Content</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>CampusTrade ACITY © 2026 | Web Technologies Project</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
