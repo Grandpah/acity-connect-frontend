@@ -6,14 +6,19 @@ let interestCounter = 0;
 const postContainer = document.getElementById("postContainer");
 const listingCount = document.getElementById("countListings");
 const interestedCount = document.getElementById("countInterested");
+const skillCount = document.getElementById("skillCount");
+const itemCount = document.getElementById("itemCount");
 
 async function loadListings() {
   try {
     const response = await fetch(`${API_URL}/listings`);
-    campusPosts = await response.json();
+    const data = await response.json();
+
+    campusPosts = data;
     renderPosts(campusPosts);
   } catch (error) {
     alert("Could not load listings from backend.");
+    console.error(error);
   }
 }
 
@@ -23,11 +28,11 @@ function renderPosts(postsToShow) {
   if (postsToShow.length === 0) {
     postContainer.innerHTML = `
       <div class="trade-card">
-        <h3>No listings found</h3>
-        <p>No approved listings are available yet.</p>
+        <h3>No approved listings yet</h3>
+        <p>Create a listing, then approve it from pgAdmin to make it visible.</p>
       </div>
     `;
-    listingCount.textContent = 0;
+    updateStats([]);
     return;
   }
 
@@ -51,10 +56,16 @@ function renderPosts(postsToShow) {
     postContainer.appendChild(card);
   });
 
-  listingCount.textContent = postsToShow.length;
+  updateStats(postsToShow);
 }
 
-async function applySearch() {
+function updateStats(posts) {
+  listingCount.textContent = posts.length;
+  skillCount.textContent = posts.filter((post) => post.category === "Skill").length;
+  itemCount.textContent = posts.filter((post) => post.category === "Item").length;
+}
+
+function applySearch() {
   const keyword = document.getElementById("keywordBox").value.toLowerCase();
   const type = document.getElementById("typeBox").value;
   const status = document.getElementById("statusBox").value;
@@ -78,8 +89,6 @@ async function registerUser() {
   const full_name = document.getElementById("registerName").value.trim();
   const email = document.getElementById("registerEmail").value.trim();
   const password = document.getElementById("registerPassword").value.trim();
-  const skills_offered = document.getElementById("registerSkillsOffered").value.trim();
-  const skills_needed = document.getElementById("registerSkillsNeeded").value.trim();
 
   if (!full_name || !email || !password) {
     alert("Please enter name, email, and password.");
@@ -95,9 +104,7 @@ async function registerUser() {
       body: JSON.stringify({
         full_name,
         email,
-        password,
-        skills_offered,
-        skills_needed
+        password
       })
     });
 
@@ -111,6 +118,7 @@ async function registerUser() {
     alert("Registration successful. You can now login.");
   } catch (error) {
     alert("Could not connect to backend.");
+    console.error(error);
   }
 }
 
@@ -143,6 +151,7 @@ async function loginUser() {
     alert("Login successful.");
   } catch (error) {
     alert("Could not connect to backend.");
+    console.error(error);
   }
 }
 
@@ -194,6 +203,7 @@ async function submitPost() {
     alert("Listing submitted. Admin approval is required before it appears publicly.");
   } catch (error) {
     alert("Could not connect to backend.");
+    console.error(error);
   }
 }
 
@@ -229,6 +239,7 @@ async function markInterest(listingId) {
     alert("Interest request sent successfully.");
   } catch (error) {
     alert("Could not connect to backend.");
+    console.error(error);
   }
 }
 
