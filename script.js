@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://acity-connect-backend.onrender.com/api";
 
 let campusPosts = [];
 let interestCounter = 0;
