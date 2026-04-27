@@ -1,85 +1,103 @@
 # CampusTrade ACITY (Frontend)
 
-📌 Project Overview
+## 📌 Project Overview
 
 CampusTrade ACITY is a smart campus marketplace and skill exchange platform designed for Academic City students.
-It allows students to buy/sell second-hand items, offer skills, and connect within the campus community.
+It allows students to trade second-hand items, offer skills, and connect within a secure campus environment.
 
 ---
 
-🌐 Live Deployment
+## 🌐 Deployment Links
 
-Frontend (GitHub Pages):
+Frontend (Live Website):
 https://grandpah.github.io/acity-connect-frontend/
 
-Backend API (Render):
+Backend API:
 https://acity-connect-backend.onrender.com
 
 ---
 
-🚀 Features Implemented
+## 🔐 Login Details
 
-👤 User System
+Email: [test@acity.edu.gh](mailto:test@acity.edu.gh)
+Password: password123
 
-* User registration and login
-* Restricted to ACity emails (@acity.edu.gh)
-* Secure authentication using JWT
+---
 
-🛒 Marketplace & Listings
+## 🚀 Features Implemented
 
-* Create listings (Items & Skills)
-* Listings include:
+### 👤 User System
 
-  * Title
-  * Description
-  * Category
-  * Status (Available, Sold, Swapped)
-  * Search and filter system implemented
+✔ User registration and login
+✔ Restricted to ACity institutional emails
+✔ Secure authentication using JWT
 
-🤝 Interaction System
+### 🛒 Marketplace and Listings
 
-* Users can express interest in listings
-* Interest request button available
-* Interaction tracking via frontend counter
+✔ Create listings (Items and Skills)
+✔ Listings include:
 
-🛠️ Admin Features
+* Title
+* Description
+* Category (Item/Skill)
+* Status (Available, Sold, Swapped)
 
-* Listings require approval before becoming visible
-* Admin moderation handled through backend/database
-* Platform activity overview (listing counts)
+✔ Search and filter listings
 
+### 🤝 Interaction System
 
-🧪 How to Test
+✔ “Interested” button
+✔ Basic interaction tracking system
 
-1. Register a user:
+### 🛠️ Admin Features
 
-   * Use email ending with `@acity.edu.gh`
+✔ Listings require admin approval before visible
+✔ Admin moderation handled via backend/database
+✔ Platform activity overview (listing counts)
 
+---
+
+## 🧪 How to Test
+
+1. Register using ACity email
 2. Login
-
 3. Create a listing
-
-4. Approve listing (Admin step):
+4. Approve listing in database:
 
 ```sql
 UPDATE listings SET approved = true;
 ```
 
-5. Refresh website → listing appears
+5. Refresh website to view listing
 
 ---
 
-🛠️ Technologies Used
+## 🛠️ Technologies Used
 
 * HTML
 * CSS
 * JavaScript (Vanilla)
 * Fetch API
-* GitHub Pages (Frontend Hosting)
+* GitHub Pages (Hosting)
 
+---
 
-📌 Notes
+## ⚙️ Installation Instructions
+
+To run locally:
+
+1. Clone repository:
+
+```bash
+git clone https://github.com/Grandpah/acity-connect-frontend
+```
+
+2. Open index.html in browser
+
+---
+
+## 📌 Notes
 
 * Only approved listings are displayed
-* Backend handles authentication and database operations
-* Admin dashboard is simplified for demonstration purposes
+* Backend handles authentication and data storage
+* Admin features are implemented through backend workflow
